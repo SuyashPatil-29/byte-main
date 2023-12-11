@@ -1,14 +1,9 @@
 "use client";
+import GcpUpload from "@/components/GcpUpload";
+import LanguageFileUpload from "@/components/LanguageFileUpload";
+import LanguageImageUpload from "@/components/LanguageImageUpload";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -16,7 +11,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -27,38 +21,39 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { Inbox, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
 import { pdfjs } from "react-pdf";
 import * as z from "zod";
-
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const FormSchema = z.object({
-  language: z.string({
-    required_error: "Please select a Language",
-  }),
-});
 
 export default function SelectForm() {
   const router = useRouter();
-
+  
   const [search, setSearch] = useState("");
   const [convertedText, setConvertedText] = useState("");
   const [uploading, setUploading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [pdfText, setPdfText] = useState("");
   const [translatedTextFromFile, setTranslatedTextFromFile] = useState("");
-
+  
+  const FormSchema = z.object({
+    language: z.string({
+      required_error: "Please select a Language",
+    }),
+  });
+  
   const formSchema = z.object({
     language: z.string(),
   });
 
   const form1 = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+  });
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
   });
 
   const onSubmitForm1 = async (data: z.infer<typeof FormSchema>) => {
@@ -70,12 +65,12 @@ export default function SelectForm() {
           params: {
             q: search,
             target: data.language,
-            key: "AIzaSyCwwqTBMDZexB6eudo6ZlLIUx_JVqKgyTg",
+            key: "AIzaSyClsCDihHhh50O2eO_G2NcboqUzt7NvbuY",
           },
         }
       )
       .then((response) => {
-        setTranslatedTextFromFile("")
+        setTranslatedTextFromFile("");
         setConvertedText(response.data.data.translations[0].translatedText);
       })
       .catch((err) => {
@@ -83,78 +78,25 @@ export default function SelectForm() {
       });
   };
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  });
 
-  const { getInputProps, getRootProps } = useDropzone({
-    accept: {
-      "application/pdf": ["pdf"],
-    },
-    maxFiles: 1,
-    onDrop: async (acceptedFile) => {
-      let file = acceptedFile[0];
-      if (file.type === "application/pdf") {
-        let fileReader = new FileReader();
-        fileReader.readAsDataURL(file);
+  // const { getInputProps, getRootProps } = useDropzone({
+  //   accept: {
+  //     "application/pdf": ["pdf"],
+  //   },
+  //   maxFiles: 1,
+  //   onDrop: async (acceptedFile) => {
+  //     let file = acceptedFile[0];
+  //     if (file.type === "application/pdf") {
+  //       let fileReader = new FileReader();
+  //       fileReader.readAsDataURL(file);
 
-        fileReader.onload = () => {
-          let res = fileReader.result;
-          extractPdfText(res as string);
-        };
-      }
-    },
-  });
-
-  async function extractPdfText(url: string) {
-    const pdf = await pdfjs.getDocument(url).promise;
-    let pages = pdf.numPages;
-    for (let i = 1; i <= pages; i++) {
-      let page = await pdf.getPage(i);
-      let txt = await page.getTextContent();
-      // @ts-ignore
-      let text = txt.items.map((s) => s.str).join("");
-      setPdfText(text);
-    }
-  }
-
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    let key = "d7fd2e143990470bbd79af1b77689a34";
-    let endpoint = "https://api.cognitive.microsofttranslator.com";
-
-    // location, also known as region.
-    // required if you're using a multi-service or regional (not global) resource. It can be found in the Azure portal on the Keys and Endpoint page.
-    let location = "southeastasia";
-
-    axios({
-      baseURL: endpoint,
-      url: "/translate",
-      method: "post",
-      headers: {
-        "Ocp-Apim-Subscription-Key": key,
-        // location required if you're using a multi-service or regional (not global) resource.
-        "Ocp-Apim-Subscription-Region": location,
-        "Content-type": "application/json",
-      },
-      params: {
-        "api-version": "3.0",
-        from: "en",
-        to: data.language,
-      },
-      data: [
-        {
-          text: pdfText,
-        },
-      ],
-      responseType: "json",
-    }).then(function (response) {
-      setConvertedText("")
-      setTranslatedTextFromFile(
-        JSON.stringify(response.data[0].translations[0].text)
-      );
-      console.log(translatedTextFromFile);
-    });
-  };
+  //       fileReader.onload = () => {
+  //         let res = fileReader.result;
+  //         extractPdfText(res as string);
+  //       };
+  //     }
+  //   },
+  // });
 
   return (
     <div className="flex-1 px-4 py-10 md:py-16 max-w-5xl xl:max-w-6xl mx-auto w-full flex flex-col">
@@ -216,82 +158,10 @@ export default function SelectForm() {
               Submit
             </Button>
           </div>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>Upload document instead</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Upload a file</DialogTitle>
-              </DialogHeader>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-6 relative"
-                  id="language-input"
-                >
-                  <div className=" pr-4 bg-white w-[400px] rounded-xl">
-                    <div
-                      {...getRootProps({
-                        className:
-                          "border-dashed border-2 rounded-xl cursor-pointer bg-gray-200 border-blue-500 py-8 flex justify-center items-center flex-col",
-                      })}
-                    >
-                      <Input {...getInputProps()} />
-                      {uploading && isLoading ? (
-                        <>
-                          {/* loading state */}
-                          <Loader2 className="h-10 w-10 text-blue-500 animate-spin" />
-                          <p className="mt-2 text-sm text-slate-400">
-                            Spilling Tea to GPT...
-                          </p>
-                        </>
-                      ) : (
-                        <>
-                          <Inbox className="w-10 h-10 text-blue-500" />
-                          <p className="mt-2 text-sm text-slate-400">
-                            {uploading && "Drop PDF Here"}{" "}
-                            {!uploading && "File uploaded successfully"}
-                          </p>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between gap-2 mr-4">
-                    <DialogDescription>Choose a language</DialogDescription>
-                    <FormField
-                      control={form.control}
-                      name="language"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger className="flex-1">
-                                <SelectValue placeholder="Select Language" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="hi">Hindi</SelectItem>
-                              <SelectItem value="mr">Marathi</SelectItem>
-                              <SelectItem value="bn">Bengali</SelectItem>
-                              <SelectItem value="gu">Gujarati</SelectItem>
-                              <SelectItem value="ta">Tamil</SelectItem>
-                              <SelectItem value="te">Telugu</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button type="submit">Submit</Button>
-                  </div>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
+          <div className="flex items-center space-x-2 mt-4">
+            <LanguageFileUpload />
+            <LanguageImageUpload />
+          </div>
         </div>
       </div>
       <div className="mt-10">
@@ -309,3 +179,44 @@ export default function SelectForm() {
     </div>
   );
 }
+
+// "use client"
+// import { useState } from 'react';
+
+// import { TranslationServiceClient } from '@google-cloud/translate';
+
+// const translate = new TranslationServiceClient();
+
+// export default function TranslationUpload() {
+//   const [file, setFile] = useState<File>();
+//   const [translatedText, setTranslatedText] = useState('');
+
+//   const handleFileChange = (e) => {
+//     setFile(e.target.files[0]);
+//   }
+
+//   const handleTranslate = async () => {
+//     if(!file) return;
+
+//     const text = await file.text();
+
+//     const translation = await translate.translateText({
+//       parent: 'projects/byte-busters-3',
+//       contents: [text],
+//       mimeType: 'text/plain',
+//       sourceLanguageCode: 'en',
+//       targetLanguageCode: 'es',
+//     }) 
+
+//     console.log(translation);
+//   }
+
+//   return (
+//     <div>
+//       <input type="file" onChange={handleFileChange} />
+//       <button onClick={handleTranslate}>Translate</button>
+
+//       <pre>{translatedText}</pre>
+//     </div>
+//   )
+// }

@@ -3,7 +3,7 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
-import {  pinecone } from "@/lib/pinecone";
+import { pinecone } from "@/lib/pinecone";
 import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/authOptions";
 
@@ -47,7 +47,7 @@ const onUploadComplete = async ({
     },
   });
 
-  if(createdFile){
+  if (createdFile) {
     await db.generation.create({
       data: {
         userId: metadata.userId,
@@ -71,23 +71,23 @@ const onUploadComplete = async ({
     const pagesAmt = pageLevelDocs.length;
 
     // vectorize and index entire document
-    const pineconeIndex = pinecone.Index('byte-busters');
-      const embeddings = new OpenAIEmbeddings({
-        openAIApiKey: process.env.OPENAI_API_KEY,
-      });
+    const pineconeIndex = pinecone.Index("byte-busters");
+    const embeddings = new OpenAIEmbeddings({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+    });
 
-      await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
-        pineconeIndex,
-      });
+    await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
+      pineconeIndex,
+    });
 
-      await db.tutor.update({
-        data: {
-          uploadStatus: 'SUCCESS',
-        },
-        where: {
-          id: createdFile.id,
-        },
-      });
+    await db.tutor.update({
+      data: {
+        uploadStatus: "SUCCESS",
+      },
+      where: {
+        id: createdFile.id,
+      },
+    });
   } catch (err) {
     console.log(err);
     await db.tutor.update({
@@ -105,7 +105,16 @@ export const ourFileRouter = {
   freePlanUploader: f({ pdf: { maxFileSize: "4MB" } })
     .middleware(middleware)
     .onUploadComplete(onUploadComplete),
-  proPlanUploader: f({ pdf: { maxFileSize: "16MB" } })
+  documentUpload: f({
+    pdf: { maxFileSize: "16MB" },
+    text: { maxFileSize: "16MB" },
+    blob: { maxFileSize: "16MB" },
+  })
+    .middleware(middleware)
+    .onUploadComplete(onUploadComplete),
+  imageUpload: f({
+    image: { maxFileSize: "16MB" },
+  })
     .middleware(middleware)
     .onUploadComplete(onUploadComplete),
 } satisfies FileRouter;
