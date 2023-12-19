@@ -60,18 +60,18 @@ export async function POST(req: NextRequest) {
     }));
 
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo-16k",
+      model: "gpt-3.5-turbo",
       temperature: 0,
       stream: true,
       messages: [
         {
           role: "system",
           content:
-            "Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format.",
+            "Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format. IF THE QUESTION IS OUT OF CONTEXT, STRICTLY REFUSE TO ANSWER. OUT OF CONTEXT CAN INCLUDE ASKING WHO IS THIS CELEBRITY OR ASKING RANDOM LAWS LIKE LAWS OF MOTIONS ETC",
         },
         {
           role: "user",
-          content: `Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format. \nIf you don't know the answer, just say that you don't know, don't try to make up an answer. If the user asks question that is out of context, politely refuse to answer
+          content: `Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format. \n If you don't know the answer, just say that you don't know, don't try to make up an answer. IMPORTANT!!! IF THE QUESTION IS OUT OF CONTEXT, STRICTLY REFUSE TO ANSWER. OUT OF CONTEXT CAN INCLUDE ASKING WHO IS THIS CELEBRITY OR ASKING RANDOM LAWS LIKE LAWS OF MOTIONS ETC
               
         \n----------------\n
         

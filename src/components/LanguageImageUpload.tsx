@@ -53,7 +53,7 @@
 
 //   const onSubmitForm1 = async (data: z.infer<typeof FormSchema>) => {
 //     setFinishUploading(true)
-    
+
 //   }
 
 //   const startSimulatedProgress = () => {
@@ -245,16 +245,6 @@
 
 "use client";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { useUploadThing } from "@/lib/uploadthing";
-import { cn } from "@/lib/utils";
-import axios from "axios";
-import { Cloud, File, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Dropzone from "react-dropzone";
-import { Button, buttonVariants } from "./ui/button";
-import { Progress } from "./ui/progress";
-import { useToast } from "./ui/use-toast";
 import {
   Form,
   FormControl,
@@ -269,16 +259,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useUploadThing } from "@/lib/uploadthing";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { Cloud, File, Loader2 } from "lucide-react";
+import { useState } from "react";
+import Dropzone from "react-dropzone";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "./ui/button";
+import { Progress } from "./ui/progress";
+import { useToast } from "./ui/use-toast";
 
 const UploadDropzone = () => {
   const { toast } = useToast();
 
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [translatedTextFromPhoto, setTranslatedTextFromPhoto] = useState<string>("");
+  const [translatedTextFromPhoto, setTranslatedTextFromPhoto] =
+    useState<string>("");
   const [uplodedDocument, setUploadedDocument] = useState<any>();
   const [finishUploading, setFinishUploading] = useState<boolean>(false);
 
@@ -300,7 +300,7 @@ const UploadDropzone = () => {
   });
 
   const onSubmitForm1 = async (data: z.infer<typeof FormSchema>) => {
-    setFinishUploading(true)
+    setFinishUploading(true);
     const options = {
       method: "POST",
       url: "https://api.edenai.run/v2/ocr/ocr",
@@ -326,7 +326,7 @@ const UploadDropzone = () => {
             {
               params: {
                 q: response.data.google.text,
-                target: data.language,
+                target: "kn",
                 key: "AIzaSyClsCDihHhh50O2eO_G2NcboqUzt7NvbuY",
               },
             }
@@ -415,15 +415,15 @@ const UploadDropzone = () => {
             <div className="flex items-center justify-center h-full w-full">
               <label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-full rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+                className="flex flex-col items-center justify-center w-full h-full rounded-lg cursor-pointer bg-gray-50 dark:bg-[rgb(23,23,23)] hover:bg-gray-100"
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <Cloud className="h-6 w-6 text-zinc-500 mb-2" />
-                  <p className="mb-2 text-sm text-zinc-700">
-                    <span className="font-semibold">Click to upload</span> or
+                  <Cloud className="h-6 w-6 text-zinc-500 mb-2 dark:text-white" />
+                  <p className="mb-2 text-sm text-zinc-700 dark:text-white">
+                    <span className="font-semibold dark:text-white">Click to upload</span> or
                     drag and drop
                   </p>
-                  <p className="text-xs text-zinc-500">PDF (up to 4 MB)</p>
+                  <p className="text-xs text-zinc-500 dark:text-white">PDF (up to 4 MB)</p>
                 </div>
 
                 {acceptedFiles && acceptedFiles[0] ? (
@@ -486,7 +486,12 @@ const UploadDropzone = () => {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className={cn(" min-w-48 md:min-w-[180px]",{"focus-visible:ring-red-500": form.formState.errors.language})}>
+                          <SelectTrigger
+                            className={cn(" min-w-48 md:min-w-[180px]", {
+                              "focus-visible:ring-red-500":
+                                form.formState.errors.language,
+                            })}
+                          >
                             <SelectValue placeholder="Select Language" />
                           </SelectTrigger>
                         </FormControl>
@@ -497,6 +502,9 @@ const UploadDropzone = () => {
                           <SelectItem value="gu">Gujarati</SelectItem>
                           <SelectItem value="ta">Tamil</SelectItem>
                           <SelectItem value="te">Telugu</SelectItem>
+                          <SelectItem value="pa">Punjabi</SelectItem>
+                          <SelectItem value="sd">Sindhi</SelectItem>
+                          <SelectItem value="ur">Urdu</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -505,7 +513,12 @@ const UploadDropzone = () => {
                 />
               </form>
             </Form>
-            <Button form="image-input" type="submit" disabled={!uplodedDocument}>
+            <Button
+              form="image-input"
+              type="submit"
+              disabled={!uplodedDocument}
+              variant="language"
+            >
               Submit
             </Button>
           </div>
@@ -528,7 +541,7 @@ const LanguageImageUpload = () => {
       }}
     >
       <DialogTrigger asChild onClick={() => setIsOpen(true)}>
-        <Button className="bg-black text-white flex-1 py-2">Photo</Button>
+        <Button variant="language" className="flex-1 py-2">Photo</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <UploadDropzone />
@@ -538,4 +551,3 @@ const LanguageImageUpload = () => {
 };
 
 export default LanguageImageUpload;
-

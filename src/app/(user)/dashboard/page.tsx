@@ -66,11 +66,11 @@ function HomePage() {
   
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full dark:text-white">
       <main className="flex-1 px-4 py-10 md:py-16 max-w-4xl xl:max-w-6xl mx-auto flex flex-col gap-6">
         <div className="flex flex-col space-y-1">
-          <h1 className="text-3xl text-black font-bold">Dashboard</h1>
-          <p className=" text-gray-800 font-medium">
+          <h1 className="text-3xl text-black dark:text-white font-bold">Dashboard</h1>
+          <p className=" text-gray-800 dark:text-white font-medium">
             Welcome back{" "}
             {isLoading ? (
               <span className="animate-pulse">...</span>

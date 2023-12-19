@@ -99,7 +99,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
               )
               setValue('page', String(currPage - 1))
             }}
-            variant='ghost'
+            className=' bg-transparent hover:bg-zinc-100 text-zinc-800 data-[state=open]:bg-transparent dark:bg-white dark:text-black'
             aria-label='previous page'>
             <ChevronDown className='h-4 w-4' />
           </Button>
@@ -108,7 +108,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
             <Input
               {...register('page')}
               className={cn(
-                'w-12 h-8',
+                'w-12 h-8 bg-white text-black',
                 errors.page && 'focus-visible:ring-red-500'
               )}
               onKeyDown={(e) => {
@@ -134,7 +134,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
               )
               setValue('page', String(currPage + 1))
             }}
-            variant='ghost'
+            className=' bg-transparent hover:bg-zinc-100 text-zinc-800 data-[state=open]:bg-transparent dark:bg-white dark:text-black'
             aria-label='next page'>
             <ChevronUp className='h-4 w-4' />
           </Button>
@@ -144,9 +144,8 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                className='gap-1.5'
                 aria-label='zoom'
-                variant='ghost'>
+                className='gap-1.5 bg-transparent hover:bg-zinc-100 text-zinc-800 data-[state=open]:bg-transparent dark:bg-white dark:text-black'>
                 <Search className='h-4 w-4' />
                 {scale * 100}%
                 <ChevronDown className='h-3 w-3 opacity-50' />
@@ -174,12 +173,12 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
 
           <Button
             onClick={() => setRotation((prev) => prev + 90)}
-            variant='ghost'
+            className=' bg-transparent hover:bg-zinc-100 text-zinc-800 data-[state=open]:bg-transparent dark:bg-white dark:text-black'
             aria-label='rotate 90 degrees'>
             <RotateCw className='h-4 w-4' />
           </Button>
 
-          <PdfFullscreen fileUrl={url} />
+          <PdfFullscreen fileUrl={url}/>
         </div>
       </div>
 

@@ -21,6 +21,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -28,23 +29,20 @@ import { pdfjs } from "react-pdf";
 import * as z from "zod";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-
 export default function SelectForm() {
   const router = useRouter();
-  
+
   const [search, setSearch] = useState("");
   const [convertedText, setConvertedText] = useState("");
-  const [uploading, setUploading] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [pdfText, setPdfText] = useState("");
+  const [isTranslatingText, setIsTranslatingText] = useState(false);
   const [translatedTextFromFile, setTranslatedTextFromFile] = useState("");
-  
+
   const FormSchema = z.object({
     language: z.string({
       required_error: "Please select a Language",
     }),
   });
-  
+
   const formSchema = z.object({
     language: z.string(),
   });
@@ -90,12 +88,13 @@ export default function SelectForm() {
         <Textarea
           onChange={(e) => setSearch(e.target.value)}
           value={search}
-          className="resize-none pr-12 text-base scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex-1 lg:min-w-[840px]"
+          className="resize-none pr-12 text-white dark:bg-[rgb(15,15,15)] scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex-1 lg:min-w-[840px]"
           placeholder="Enter your text to translate"
           rows={1}
           maxRows={3}
           minRows={3}
           autoFocus
+          spellCheck
         />
         <div className="flex flex-col space-y-2">
           <div className="flex space-x-2">
@@ -126,6 +125,9 @@ export default function SelectForm() {
                           <SelectItem value="gu">Gujarati</SelectItem>
                           <SelectItem value="ta">Tamil</SelectItem>
                           <SelectItem value="te">Telugu</SelectItem>
+                          <SelectItem value="pa">Punjabi</SelectItem>
+                          <SelectItem value="sd">Sindhi</SelectItem>
+                          <SelectItem value="ur">Urdu</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -134,7 +136,7 @@ export default function SelectForm() {
                 />
               </form>
             </Form>
-            <Button form="language-input" type="submit">
+            <Button variant="language" form="language-input" type="submit">
               Submit
             </Button>
           </div>
@@ -144,18 +146,24 @@ export default function SelectForm() {
           </div>
         </div>
       </div>
-      <div className="mt-10">
-        <h1 className="text-3xl font-bold">Translated Text</h1>
-        <p className="text-muted-foreground font-medium">
-          Translated text will appear below
-        </p>
-        {(translatedTextFromFile || convertedText) && (
-          <Card className="mt-4 mx-3 p-5 font-medium">
-            {translatedTextFromFile}
-            {convertedText}
-          </Card>
-        )}
-      </div>
+      {isTranslatingText ? (
+        <div className=" h-full w-full flex justify-center items-center">
+          <Loader2 className=" h-10 w-10"/>
+        </div>
+      ) : (
+        <div className="mt-10">
+          <h1 className="text-3xl font-bold">Translated Text</h1>
+          <p className="text-muted-foreground font-medium">
+            Translated text will appear below
+          </p>
+          {(translatedTextFromFile || convertedText) && (
+            <Card className="mt-4 mx-3 p-5 font-medium">
+              {translatedTextFromFile}
+              {convertedText}
+            </Card>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -186,7 +194,7 @@ export default function SelectForm() {
 //       mimeType: 'text/plain',
 //       sourceLanguageCode: 'en',
 //       targetLanguageCode: 'es',
-//     }) 
+//     })
 
 //     console.log(translation);
 //   }

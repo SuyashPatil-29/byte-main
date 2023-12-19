@@ -4,8 +4,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import AllProviders from "@/components/Providers";
 import { Toaster } from "@/components/ui/toaster";
-import "react-loading-skeleton/dist/skeleton.css"
-import "simplebar-react/dist/simplebar.min.css"
+import "react-loading-skeleton/dist/skeleton.css";
+import "simplebar-react/dist/simplebar.min.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,12 +25,19 @@ export default function RootLayout({
       <AllProviders>
         <body
           className={cn(
-            "min-h-screen font-sans antialiased grainy",
+            "min-h-screen font-sans antialiased grainy dark:bg-black bg-white dark:text-white",
             inter.className
           )}
         >
-          {children}
-          <Toaster />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster />
+          </ThemeProvider>
         </body>
       </AllProviders>
     </html>

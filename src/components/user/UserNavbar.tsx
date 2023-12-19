@@ -4,6 +4,7 @@ import { Sidebar } from "./Sidebar";
 import { Button } from "@/components/ui/button";
 import { HeaderLink } from "./HeaderLink";
 import { UserDropdown } from "./Userdropdown";
+import { ModeToggle } from "../ToggleThemeButton";
 
 export default function UserNavbar() {
   return (
@@ -22,9 +23,10 @@ export default function UserNavbar() {
       </div>
 
       <div className="flex items-center">
+        <ModeToggle />
         <a href="https://www.instagram.com/_suyashpatil_/" className="mr-3">
           <Button variant="ghost">
-            <Instagram className="h-5 w-5" />
+            <Instagram className="h-5 w-5 hover:text-rose-400" />
           </Button>
         </a>
         <UserDropdown />

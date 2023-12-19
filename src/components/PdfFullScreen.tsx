@@ -35,8 +35,7 @@ const PdfFullscreen = ({ fileUrl }: PdfFullscreenProps) => {
         onClick={() => setIsOpen(true)}
         asChild>
         <Button
-          variant='ghost'
-          className='gap-1.5'
+          className='gap-1.5 bg-transparent hover:bg-zinc-100 text-zinc-800 data-[state=open]:bg-transparent dark:bg-white dark:text-black'
           aria-label='fullscreen'>
           <Expand className='h-4 w-4' />
         </Button>
