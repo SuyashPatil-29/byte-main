@@ -318,6 +318,7 @@ const UploadDropzone = () => {
     axios
       .request(options)
       .then((response) => {
+        console.log(response.data.google.text);
         axios
           .post(
             "https://translation.googleapis.com/language/translate/v2",
@@ -379,8 +380,6 @@ const UploadDropzone = () => {
 
         // handle file uploading
         const res = await startUpload(acceptedFile);
-        console.log(acceptedFile[0].type);
-        console.log(typeof acceptedFile[0].type);
 
         if (!res) {
           return toast({

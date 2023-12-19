@@ -20,7 +20,7 @@ export function Sidebar() {
           <Link href="/dashboard" className="flex items-center">
             <GraduationCap className="h-6 w-6 mr-2" />
             <h1 className="font-semibold text-xl font-cal">
-              PDFile
+              LangChain
             </h1>
           </Link>
         </SheetHeader>

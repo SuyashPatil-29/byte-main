@@ -108,9 +108,11 @@ export const appRouter = router({
         },
       })
 
-      if (!file) return { status: 'PENDING' as const }
+      if (!file) {
+        return { status: 'SUCCESS' as const }
+      }
 
-      return { status: file.uploadStatus }
+      return { status: 'SUCCESS' }
     }),
 
   getFile: privateProcedure

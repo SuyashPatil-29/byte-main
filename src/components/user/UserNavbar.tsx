@@ -12,7 +12,7 @@ export default function UserNavbar() {
       <div className="hidden md:flex items-center space-x-10">
         <Link href="/" className="flex items-center">
           <GraduationCap className="h-6 w-6 mr-2.5" />
-          <h1 className="font-semibold text-xl">PDFILE</h1>
+          <h1 className="font-semibold text-xl">LangChain</h1>
         </Link>
         <div className="flex items-center space-x-8 text-sm font-medium">
           <HeaderLink href="/dashboard">Dashboard</HeaderLink>

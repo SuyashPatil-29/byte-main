@@ -78,26 +78,6 @@ export default function SelectForm() {
       });
   };
 
-
-  // const { getInputProps, getRootProps } = useDropzone({
-  //   accept: {
-  //     "application/pdf": ["pdf"],
-  //   },
-  //   maxFiles: 1,
-  //   onDrop: async (acceptedFile) => {
-  //     let file = acceptedFile[0];
-  //     if (file.type === "application/pdf") {
-  //       let fileReader = new FileReader();
-  //       fileReader.readAsDataURL(file);
-
-  //       fileReader.onload = () => {
-  //         let res = fileReader.result;
-  //         extractPdfText(res as string);
-  //       };
-  //     }
-  //   },
-  // });
-
   return (
     <div className="flex-1 px-4 py-10 md:py-16 max-w-5xl xl:max-w-6xl mx-auto w-full flex flex-col">
       <div className="flex flex-col space-y-1">
