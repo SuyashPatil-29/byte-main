@@ -55,13 +55,14 @@ export default function SelectForm() {
   });
 
   const onSubmitForm1 = async (data: z.infer<typeof FormSchema>) => {
+    const searchWithoutNumbers = search.replace(/\d/g, '')
     const response = axios
       .post(
         "https://translation.googleapis.com/language/translate/v2",
         {},
         {
           params: {
-            q: search,
+            q: searchWithoutNumbers,
             target: data.language,
             key: "AIzaSyClsCDihHhh50O2eO_G2NcboqUzt7NvbuY",
           },
@@ -91,8 +92,8 @@ export default function SelectForm() {
           className="resize-none pr-12 text-white dark:bg-[rgb(15,15,15)] scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex-1 lg:min-w-[840px]"
           placeholder="Enter your text to translate"
           rows={1}
-          maxRows={3}
-          minRows={3}
+          maxRows={4}
+          minRows={4}
           autoFocus
           spellCheck
         />

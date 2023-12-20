@@ -326,7 +326,7 @@ const UploadDropzone = () => {
             {
               params: {
                 q: response.data.google.text,
-                target: "kn",
+                target: data.language,
                 key: "AIzaSyClsCDihHhh50O2eO_G2NcboqUzt7NvbuY",
               },
             }

@@ -107,7 +107,7 @@ const UploadDropzone = () => {
         <a
           href={fileUrl}
           target="_blank"
-          className={cn(buttonVariants(), "w-full")}
+          className={cn(buttonVariants({variant : "language"}), "w-full")}
         >
           Download Now
         </a>
@@ -177,7 +177,7 @@ const UploadDropzone = () => {
                     <div className="px-3 py-2 h-full grid place-items-center">
                       <File className="h-4 w-4 text-blue-500" />
                     </div>
-                    <div className="px-3 py-2 h-full text-sm truncate">
+                    <div className="px-3 py-2 h-full text-sm truncate text-black">
                       {acceptedFiles[0].name}
                     </div>
                   </div>
@@ -193,13 +193,13 @@ const UploadDropzone = () => {
                       className="h-1 w-full bg-zinc-200"
                     />
                     {uploadProgress === 100 && !finishUploading ? (
-                      <div className="flex gap-1 items-center justify-center text-sm text-zinc-700 text-center pt-2">
+                      <div className="flex gap-1 items-center justify-center text-sm text-zinc-700 dark:text-white text-center pt-2">
                         Select language
                       </div>
                     ) : null}
                     {finishUploading ? (
                       <div className="flex gap-1 items-center justify-center text-sm text-zinc-700 text-center pt-2">
-                        <Loader2 className="h-4 w-4 text-blue-500 animate-spin" />
+                        <Loader2 className="h-4 w-4 text-blue-500 animate-spin dark:text-white" />
                         Translating...
                       </div>
                     ) : null}

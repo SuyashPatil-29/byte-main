@@ -126,28 +126,6 @@ function HomePage() {
                 ) : (
                   <ul className="flex flex-col space-y-2 text-muted-foreground">
                     <li>
-                      <Link href="/languageTranslator">
-                        {
-                          user.generations.filter(
-                            (generation: any) => generation.type == "code-generator"
-                          ).length
-                        }{" "}
-                        Code Generators
-                      </Link>
-                    </li>
-                    <Separator />
-                    <li>
-                      <Link href="/quizzes">
-                        {
-                          user.generations.filter(
-                            (generation: any) => generation.type == "books"
-                          ).length
-                        }{" "}
-                        Books
-                      </Link>
-                    </li>
-                    <Separator />
-                    <li>
                       <Link href="/chat">
                         {
                           user.generations.filter(
