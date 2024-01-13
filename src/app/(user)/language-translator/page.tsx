@@ -89,7 +89,7 @@ export default function SelectForm() {
         <Textarea
           onChange={(e) => setSearch(e.target.value)}
           value={search}
-          className="resize-none pr-12 text-white dark:bg-[rgb(15,15,15)] scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex-1 lg:min-w-[840px]"
+          className="resize-none pr-12 text-white bg-[rgb(15,15,15)] scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex-1 lg:min-w-[840px]"
           placeholder="Enter your text to translate"
           rows={1}
           maxRows={4}
